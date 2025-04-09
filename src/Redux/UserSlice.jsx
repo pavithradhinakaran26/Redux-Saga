@@ -1,28 +1,29 @@
+import { createSlice } from "@reduxjs/toolkit";
 
+const userSlice = createSlice({
+  name: "user",
+  initialState: {
+    users: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    registerUserStart: (state) => {
+      state.loading = true;
+    },
+    registerUserSuccess: (state, action) => {
+      state.loading = false;
+      state.users.push(action.payload);
+    },
+    registerUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+  },
+});
 
+// Export actions
+export const { registerUserStart, registerUserSuccess, registerUserFailure } = userSlice.actions;
 
-const initialState = {
-  loading: false,
-  error: null,
-};
-
-const userReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case "REGISTER_USER_REQUEST":
-      return { ...state, loading: true };
-
-    case "REGISTER_USER_SUCCESS":
-      return { ...state, loading: false };
-
-    case "REGISTER_USER_FAILURE":
-      return { ...state, loading: false, error: action.payload };
-
-    default:
-      return state;
-  }
-};
-
-export default userReducer;
-
-
-
+// Export reducer
+export default userSlice.reducer;

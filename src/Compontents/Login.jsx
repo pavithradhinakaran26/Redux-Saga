@@ -1,3 +1,6 @@
+
+
+
 // import { useState } from "react";
 // import { useDispatch, useSelector } from "react-redux";
 // import { loginRequest } from "../Redux/AuthSlice";
@@ -10,7 +13,7 @@
 //   const [successMessage] = useState("");
 
 //   const dispatch = useDispatch();
-//   const { loading, error } = useSelector((state) => state.user || {});  
+//   const { loading, error } = useSelector((state) => state.user || {});
 
 //   const navigate = useNavigate();
 
@@ -23,7 +26,7 @@
 //     dispatch(loginRequest({ username: userName.trim(), password: userPassword.trim() }));
 
 //     setTimeout(() => {
-//       navigate("/Table");
+//       navigate("/Table");  // After login -> navigate to Table page
 //     }, 2000);
 //   };
 
@@ -71,10 +74,9 @@ import "./Login.css";
 function Login() {
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [successMessage] = useState("");
 
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.user || {});
+  const { loading, error } = useSelector((state) => state.user || {});  
 
   const navigate = useNavigate();
 
@@ -87,7 +89,7 @@ function Login() {
     dispatch(loginRequest({ username: userName.trim(), password: userPassword.trim() }));
 
     setTimeout(() => {
-      navigate("/Table");  // After login -> navigate to Table page
+      navigate("/Table");
     }, 2000);
   };
 
@@ -95,24 +97,26 @@ function Login() {
     <div className="login-container">
       <div className="login-box">
         <h2>Login</h2>
+
         <input
           type="text"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           placeholder="Enter Name"
         />
+
         <input
           type="password"
           value={userPassword}
           onChange={(e) => setUserPassword(e.target.value)}
           placeholder="Enter Password"
         />
+
         <button onClick={handleLogin} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
 
         {error && <p className="error-message">{error}</p>}
-        {successMessage && <p className="success-message">{successMessage}</p>}
 
         <p>
           Don't have an account? <a href="/register">Register</a>
@@ -123,3 +127,4 @@ function Login() {
 }
 
 export default Login;
+

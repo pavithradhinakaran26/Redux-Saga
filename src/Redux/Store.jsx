@@ -23,8 +23,11 @@
 
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import createSagaMiddleware from "redux-saga";
-import userReducer from "./UserSlice";
-import { UserSaga } from "./UserSaga";
+import userReducer from "./UserSlice";  // reducer import
+import UserSaga from "./UserSaga";
+
+// import { UserSaga } from "./UserSaga";  // saga import
+
 
 
 const sagaMiddleware = createSagaMiddleware();
