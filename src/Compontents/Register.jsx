@@ -3,16 +3,8 @@
 // import { useLocation, useNavigate } from "react-router-dom";
 // import "./Register.css";
 
-// const stateData = [
-//   "TamilNadu",
-//   "Kerala",
-//   "Karnataka",
-//   "AndhraPradesh",
-//   "Telangana",
-//   "Maharashtra",
-//   "Gujarat",
-// ];
-
+// // State and city data
+// const stateData = ["TamilNadu", "Kerala", "Karnataka", "AndhraPradesh", "Telangana", "Maharashtra", "Gujarat"];
 // const cityData = {
 //   TamilNadu: ["Chennai", "Coimbatore", "Madurai", "Salem", "Erode", "Trichy"],
 //   Kerala: ["Kochi", "Trivandrum", "Kozhikode", "Thrissur", "Alappuzha"],
@@ -38,6 +30,7 @@
 //     city: "",
 //   });
 
+//   // On component mount or when existing user is found, pre-fill form
 //   useEffect(() => {
 //     if (existingUser) {
 //       setFormData(existingUser);
@@ -50,23 +43,33 @@
 
 //   const handleSubmit = (e) => {
 //     e.preventDefault();
-
-//     if (
-//       !formData.name ||
-//       !formData.email ||
-//       !formData.password ||
-//       !formData.state ||
-//       !formData.city
-//     ) {
+    
+//     const { name, email, password, state, city } = formData;
+//     if (!name || !email || !password || !state || !city) {
 //       alert("Please fill all fields");
 //       return;
 //     }
 
-//     dispatch({
-//       type: "user/registerUserStart",
-//       payload: { userData: formData, navigate },
-//     });
+//     console.log("Submitting form data:", formData);  // Log form data to check if it is correct
     
+//     if (existingUser) {
+//       // Dispatch action for updating user
+//       console.log("Dispatching update action"); // Debugging line
+//       dispatch({
+//         type: "user/updateUserStart",
+//         payload: { userData: formData },
+//       });
+//     } else {
+//       // Dispatch action for registering user
+//       console.log("Dispatching register action"); // Debugging line
+//       dispatch({
+//         type: "user/registerUserStart",
+//         payload: { userData: formData },
+//       });
+//     }
+
+//     // After submitting, navigate to the Table page
+//     navigate("/Table"); // Navigate to the Table page after registration or update
 //   };
 
 //   return (
@@ -123,9 +126,7 @@
 //               ))}
 //           </select>
 
-//           <button type="submit">
-//             {existingUser ? "Update" : "Register"}
-//           </button>
+//           <button type="submit">{existingUser ? "Update" : "Register"}</button>
 //         </form>
 //       </div>
 //     </div>
@@ -142,10 +143,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./Register.css";
 
-const stateData = [
-  "TamilNadu", "Kerala", "Karnataka", "AndhraPradesh", "Telangana", "Maharashtra", "Gujarat",
-];
-
+const stateData = ["TamilNadu", "Kerala", "Karnataka", "AndhraPradesh", "Telangana", "Maharashtra", "Gujarat"];
 const cityData = {
   TamilNadu: ["Chennai", "Coimbatore", "Madurai", "Salem", "Erode", "Trichy"],
   Kerala: ["Kochi", "Trivandrum", "Kozhikode", "Thrissur", "Alappuzha"],
@@ -171,9 +169,11 @@ const Register = () => {
     city: "",
   });
 
+  
   useEffect(() => {
     if (existingUser) {
-      setFormData(existingUser);
+      console.log("Existing user found:", existingUser); 
+      setFormData(existingUser); 
     }
   }, [existingUser]);
 
@@ -184,24 +184,30 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.password || !formData.state || !formData.city) {
-      alert("Please fill all fields");
+    const { name, email, password, state, city } = formData;
+    if (!name || !email || !password || !state || !city) {
+      alert("Please fill all fields"); 
       return;
     }
 
+    console.log("Submitting form data:", formData);  
+
     if (existingUser) {
-      // Edit user
+      console.log("Dispatching update action");
       dispatch({
         type: "user/updateUserStart",
-        payload: { userData: formData, navigate },
+        payload: { userData: formData }, 
       });
     } else {
-      // Register user
+      console.log("Dispatching register action");
       dispatch({
         type: "user/registerUserStart",
-        payload: { userData: formData, navigate },
+        payload: { userData: formData },
       });
     }
+
+   
+    navigate("/Table"); 
   };
 
   return (
@@ -211,19 +217,39 @@ const Register = () => {
 
         <form onSubmit={handleSubmit}>
           <label>Name</label>
-          <input type="text" name="name" value={formData.name} placeholder="Enter Name" onChange={handleChange} />
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            placeholder="Enter Name"
+            onChange={handleChange}
+          />
 
           <label>Email</label>
-          <input type="email" name="email" value={formData.email} placeholder="Enter Email" onChange={handleChange} />
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            placeholder="Enter Email"
+            onChange={handleChange}
+          />
 
           <label>Password</label>
-          <input type="password" name="password" value={formData.password} placeholder="Enter Password" onChange={handleChange} />
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            placeholder="Enter Password"
+            onChange={handleChange}
+          />
 
           <label>State</label>
           <select name="state" value={formData.state} onChange={handleChange}>
             <option value="">Select State</option>
             {stateData.map((state) => (
-              <option key={state} value={state}>{state}</option>
+              <option key={state} value={state}>
+                {state}
+              </option>
             ))}
           </select>
 
@@ -232,7 +258,9 @@ const Register = () => {
             <option value="">Select City</option>
             {formData.state &&
               cityData[formData.state]?.map((city) => (
-                <option key={city} value={city}>{city}</option>
+                <option key={city} value={city}>
+                  {city}
+                </option>
               ))}
           </select>
 

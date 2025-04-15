@@ -25,12 +25,12 @@ function* loginSaga(action) {
     );
 
     if (user) {
-      console.log("Login Successful:", user); 
+      console.log("Login Successful:", user);
       localStorage.setItem("user", JSON.stringify(user));
-      yield put(loginSuccess(user));
+      yield put(loginSuccess(user)); 
+
     } else {
      
-      // yield put(loginFailure("Invalid username or password!"));
     }
   } catch (error) {
     console.log("Network Error:", error.message); 
