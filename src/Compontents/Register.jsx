@@ -172,7 +172,7 @@ const Register = () => {
   
   useEffect(() => {
     if (existingUser) {
-      console.log("Existing user found:", existingUser); 
+      console.log("Existing user found:", existingUser);
       setFormData(existingUser); 
     }
   }, [existingUser]);

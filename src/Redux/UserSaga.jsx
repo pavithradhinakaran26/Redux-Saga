@@ -110,7 +110,7 @@ import {
   deleteUserFailure,
   fetchUserSuccess,
   fetchUserFailure,
-} from "./userAction";
+} from "./UserAction";
 
 const mockAPI = "https://67e4fa6218194932a583ee55.mockapi.io/users";
 
