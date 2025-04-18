@@ -11,7 +11,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/table" element={<Table />} />
+        <Route path="/Table" element={<Table />} />
+
         <Route path="/register" element={<Register />} />
         <Route path="/user" element={<User />} />
         
@@ -21,3 +22,9 @@ function App() {
 }
 
 export default App;
+
+
+
+
+
+

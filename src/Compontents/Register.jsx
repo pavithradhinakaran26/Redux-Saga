@@ -1,274 +1,65 @@
-// import React, { useState, useEffect } from "react";
-// import { useDispatch } from "react-redux";
-// import { useLocation, useNavigate } from "react-router-dom";
-// import "./Register.css";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginRequest } from "../Redux/AuthSlice"; // Make sure the path is correct
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import "./Login.css";
 
-// // State and city data
-// const stateData = ["TamilNadu", "Kerala", "Karnataka", "AndhraPradesh", "Telangana", "Maharashtra", "Gujarat"];
-// const cityData = {
-//   TamilNadu: ["Chennai", "Coimbatore", "Madurai", "Salem", "Erode", "Trichy"],
-//   Kerala: ["Kochi", "Trivandrum", "Kozhikode", "Thrissur", "Alappuzha"],
-//   Karnataka: ["Bangalore", "Mysore", "Mangalore", "Hubli", "Belgaum"],
-//   AndhraPradesh: ["Vijayawada", "Visakhapatnam", "Guntur", "Nellore"],
-//   Telangana: ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar"],
-//   Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane"],
-//   Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
-// };
+function Login() {
+  const [userName, setUserName] = useState("");
+  const [userPassword, setUserPassword] = useState("");
 
-// const Register = () => {
-//   const location = useLocation();
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-
-//   const existingUser = location.state?.user || null;
-
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//     state: "",
-//     city: "",
-//   });
-
-//   // On component mount or when existing user is found, pre-fill form
-//   useEffect(() => {
-//     if (existingUser) {
-//       setFormData(existingUser);
-//     }
-//   }, [existingUser]);
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-    
-//     const { name, email, password, state, city } = formData;
-//     if (!name || !email || !password || !state || !city) {
-//       alert("Please fill all fields");
-//       return;
-//     }
-
-//     console.log("Submitting form data:", formData);  // Log form data to check if it is correct
-    
-//     if (existingUser) {
-//       // Dispatch action for updating user
-//       console.log("Dispatching update action"); // Debugging line
-//       dispatch({
-//         type: "user/updateUserStart",
-//         payload: { userData: formData },
-//       });
-//     } else {
-//       // Dispatch action for registering user
-//       console.log("Dispatching register action"); // Debugging line
-//       dispatch({
-//         type: "user/registerUserStart",
-//         payload: { userData: formData },
-//       });
-//     }
-
-//     // After submitting, navigate to the Table page
-//     navigate("/Table"); // Navigate to the Table page after registration or update
-//   };
-
-//   return (
-//     <div className="register-container">
-//       <div className="register-card">
-//         <h2>{existingUser ? "Edit User" : "Register User"}</h2>
-
-//         <form onSubmit={handleSubmit}>
-//           <label>Name</label>
-//           <input
-//             type="text"
-//             name="name"
-//             value={formData.name}
-//             placeholder="Enter Name"
-//             onChange={handleChange}
-//           />
-
-//           <label>Email</label>
-//           <input
-//             type="email"
-//             name="email"
-//             value={formData.email}
-//             placeholder="Enter Email"
-//             onChange={handleChange}
-//           />
-
-//           <label>Password</label>
-//           <input
-//             type="password"
-//             name="password"
-//             value={formData.password}
-//             placeholder="Enter Password"
-//             onChange={handleChange}
-//           />
-
-//           <label>State</label>
-//           <select name="state" value={formData.state} onChange={handleChange}>
-//             <option value="">Select State</option>
-//             {stateData.map((state) => (
-//               <option key={state} value={state}>
-//                 {state}
-//               </option>
-//             ))}
-//           </select>
-
-//           <label>City</label>
-//           <select name="city" value={formData.city} onChange={handleChange}>
-//             <option value="">Select City</option>
-//             {formData.state &&
-//               cityData[formData.state]?.map((city) => (
-//                 <option key={city} value={city}>
-//                   {city}
-//                 </option>
-//               ))}
-//           </select>
-
-//           <button type="submit">{existingUser ? "Update" : "Register"}</button>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Register;
-
-
-
-
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import "./Register.css";
-
-const stateData = ["TamilNadu", "Kerala", "Karnataka", "AndhraPradesh", "Telangana", "Maharashtra", "Gujarat"];
-const cityData = {
-  TamilNadu: ["Chennai", "Coimbatore", "Madurai", "Salem", "Erode", "Trichy"],
-  Kerala: ["Kochi", "Trivandrum", "Kozhikode", "Thrissur", "Alappuzha"],
-  Karnataka: ["Bangalore", "Mysore", "Mangalore", "Hubli", "Belgaum"],
-  AndhraPradesh: ["Vijayawada", "Visakhapatnam", "Guntur", "Nellore"],
-  Telangana: ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar"],
-  Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane"],
-  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
-};
-
-const Register = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const existingUser = location.state?.user || null;
+  const { loading, error, userData } = useSelector((state) => state.auth || {}); // Fetch auth state from Redux
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    state: "",
-    city: "",
-  });
+  // Handle Login Request
+  const handleLogin = () => {
+    dispatch(loginRequest({ username: userName.trim(), password: userPassword.trim() }));
+  };
 
-  
   useEffect(() => {
-    if (existingUser) {
-      console.log("Existing user found:", existingUser);
-      setFormData(existingUser); 
+    if (userData && !loading) {
+      console.log("Login success, storing user data in localStorage...");
+      localStorage.setItem("user", JSON.stringify(userData)); // Store user data in localStorage
+      navigate("/table"); // Navigate to the Table page
+    } else if (error) {
+      alert("Login failed, please try again.");
     }
-  }, [existingUser]);
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const { name, email, password, state, city } = formData;
-    if (!name || !email || !password || !state || !city) {
-      alert("Please fill all fields"); 
-      return;
-    }
-
-    console.log("Submitting form data:", formData);  
-
-    if (existingUser) {
-      console.log("Dispatching update action");
-      dispatch({
-        type: "user/updateUserStart",
-        payload: { userData: formData }, 
-      });
-    } else {
-      console.log("Dispatching register action");
-      dispatch({
-        type: "user/registerUserStart",
-        payload: { userData: formData },
-      });
-    }
-
-   
-    navigate("/Table"); 
-  };
+  }, [userData, navigate, loading, error]); // Dependency to watch for changes
 
   return (
-    <div className="register-container">
-      <div className="register-card">
-        <h2>{existingUser ? "Edit User" : "Register User"}</h2>
+    <div className="login-container">
+      <div className="login-box">
+        <h2>Login</h2>
 
-        <form onSubmit={handleSubmit}>
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            placeholder="Enter Name"
-            onChange={handleChange}
-          />
+        <input
+          type="text"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          placeholder="Enter Name"
+        />
 
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            placeholder="Enter Email"
-            onChange={handleChange}
-          />
+        <input
+          type="password"
+          value={userPassword}
+          onChange={(e) => setUserPassword(e.target.value)}
+          placeholder="Enter Password"
+        />
 
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            placeholder="Enter Password"
-            onChange={handleChange}
-          />
+        <button onClick={handleLogin} disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
 
-          <label>State</label>
-          <select name="state" value={formData.state} onChange={handleChange}>
-            <option value="">Select State</option>
-            {stateData.map((state) => (
-              <option key={state} value={state}>
-                {state}
-              </option>
-            ))}
-          </select>
+        {error && <p className="error-message">{error}</p>}
 
-          <label>City</label>
-          <select name="city" value={formData.city} onChange={handleChange}>
-            <option value="">Select City</option>
-            {formData.state &&
-              cityData[formData.state]?.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-          </select>
-
-          <button type="submit">{existingUser ? "Update" : "Register"}</button>
-        </form>
+        <p>
+          Don't have an account? <Link to="/register">Register</Link>
+        </p>
       </div>
     </div>
   );
-};
+}
 
-export default Register;
+export default Login;

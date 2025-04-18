@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loginRequest } from "../Redux/AuthSlice";
+import { loginRequest } from "../Redux/AuthSlice"; 
 import { useNavigate } from "react-router-dom"; 
 import { Link } from "react-router-dom"; 
 import "./Login.css";
@@ -12,26 +12,21 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error, userData } = useSelector((state) => state.auth || {}); 
+  const { loading, error, userData, successMessage } = useSelector((state) => state.auth || {}); 
 
+ 
   const handleLogin = () => {
-    console.log("Login requested with", userName, userPassword); 
-    if (!userName.trim() || !userPassword.trim()) {
-      alert("Please enter Name and Password.");
-      return;
-    }
     dispatch(loginRequest({ username: userName.trim(), password: userPassword.trim() }));
   };
 
   useEffect(() => {
-    console.log("userData:", userData);  
-    if (userData && !loading) { 
+    if (userData) {
       console.log("Login success, navigating to Table...");
-      navigate("/Table");  
+      navigate("/Table"); 
     } else if (error) {
       alert("Login failed, please try again.");
     }
-  }, [userData, navigate, loading, error]);
+  }, [userData, error, navigate]); 
 
   return (
     <div className="login-container">
@@ -57,9 +52,10 @@ function Login() {
         </button>
 
         {error && <p className="error-message">{error}</p>}
+        {successMessage && <p className="success-message">{successMessage}</p>} 
 
         <p>
-          Don't have an account? <Link to="/register">Register</Link> 
+          Don't have an account? <Link to="/register">Register</Link>
         </p>
       </div>
     </div>

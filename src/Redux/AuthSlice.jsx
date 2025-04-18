@@ -1,17 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  userData: null,
-  loading: false,
-  error: null,
-};
-
+// Auth state slice
 const authSlice = createSlice({
-  name: 'auth',
-  initialState,
+  name: "auth",
+  initialState: {
+    loading: false,
+    userData: null,
+    error: null,
+  },
   reducers: {
     loginRequest: (state) => {
       state.loading = true;
+      state.error = null;
     },
     loginSuccess: (state, action) => {
       state.loading = false;

@@ -1,9 +1,11 @@
-// RootSaga.jsx
-import { all } from "redux-saga/effects";
-import { watchLogin } from "./AuthSaga"; // ✅ Now properly imported
+import { all } from 'redux-saga/effects';
+// import { watchLoginRequest } from './AuthSaga';
 
 export default function* rootSaga() {
   yield all([
-    watchLogin(), // ✅ no more "not defined"
+    watchLoginRequest()
   ]);
 }
+export function* watchLoginRequest() { }
+
+
