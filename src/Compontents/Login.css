@@ -1,4 +1,4 @@
-.login-container {
+/* .login-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,4 +62,129 @@
   margin-top: 10px;
   font-size: 14px;
   font-weight: bold;
+} */
+
+
+
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to right, #f3f4f6, #e2e8f0);
+  font-family: 'Poppins', sans-serif;
+  padding: 20px;
+}
+
+.login-box {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.login-box:hover {
+  transform: scale(1.02);
+}
+
+.login-box h2 {
+  margin-bottom: 1.5rem;
+  color: #4F46E5;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.login-box .form-label {
+  font-size: 14px;
+  color: #6B7280;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.login-box .form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.login-box .form-control:focus {
+  border-color: #4F46E5;
+  outline: none;
+  box-shadow: none;
+}
+
+.input-group {
+  position: relative;
+}
+
+.input-group .input-group-text {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #6B7280;
+  font-size: 16px;
+  z-index: 2;
+}
+
+.input-group input {
+  padding-left: 40px !important;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: #6B7280;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.login-box .btn {
+  background: #4F46E5;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  transition: background 0.3s ease-in-out;
+}
+
+.login-box .btn:hover {
+  background: #3B3EE2;
+}
+
+.toggle-link {
+  color: #4F46E5;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.toggle-link:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: red;
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+hr {
+  border: 1px solid #E5E7EB;
+  margin: 20px 0;
 }

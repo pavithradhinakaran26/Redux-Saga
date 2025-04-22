@@ -1,65 +1,100 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { loginRequest } from "../Redux/AuthSlice"; // Make sure the path is correct
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
-import "./Login.css";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import "./Register.css";
 
-function Login() {
-  const [userName, setUserName] = useState("");
-  const [userPassword, setUserPassword] = useState("");
+const stateData = [
+  "TamilNadu", "Kerala", "Karnataka", "AndhraPradesh", "Telangana", "Maharashtra", "Gujarat"
+];
 
-  const dispatch = useDispatch();
+const cityData = {
+  TamilNadu: ["Chennai", "Coimbatore", "Madurai", "Salem", "Erode", "Trichy"],
+  Kerala: ["Kochi", "Trivandrum", "Kozhikode", "Thrissur", "Alappuzha"],
+  Karnataka: ["Bangalore", "Mysore", "Mangalore", "Hubli", "Belgaum"],
+  AndhraPradesh: ["Vijayawada", "Visakhapatnam", "Guntur", "Nellore"],
+  Telangana: ["Hyderabad", "Warangal", "Nizamabad", "Karimnagar"],
+  Maharashtra: ["Mumbai", "Pune", "Nagpur", "Nashik", "Thane"],
+  Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar"],
+};
+
+const Register = () => {
+  const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const { loading, error, userData } = useSelector((state) => state.auth || {}); // Fetch auth state from Redux
+  const existingUser = location.state?.user || null;
 
-  // Handle Login Request
-  const handleLogin = () => {
-    dispatch(loginRequest({ username: userName.trim(), password: userPassword.trim() }));
-  };
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    state: "",
+    city: "",
+  });
 
   useEffect(() => {
-    if (userData && !loading) {
-      console.log("Login success, storing user data in localStorage...");
-      localStorage.setItem("user", JSON.stringify(userData)); // Store user data in localStorage
-      navigate("/table"); // Navigate to the Table page
-    } else if (error) {
-      alert("Login failed, please try again.");
+    if (existingUser) setFormData(existingUser);
+  }, [existingUser]);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { name, email, password, state, city } = formData;
+    if (!name || !email || !password || !state || !city) {
+      alert("Please fill all fields");
+      return;
     }
-  }, [userData, navigate, loading, error]); // Dependency to watch for changes
+
+    if (existingUser) {
+      dispatch({
+        type: "user/registerUserStart",
+        payload: { userData: formData, navigate },
+      });
+      
+    } else {
+      dispatch({
+        type: "user/registerUserStart",
+        payload: { userData: formData, navigate },
+      });
+    }
+  };
 
   return (
-    <div className="login-container">
-      <div className="login-box">
-        <h2>Login</h2>
+    <div className="register-container">
+      <div className="register-card">
+        <h2>{existingUser ? "Edit User" : "Register User"}</h2>
+        <form onSubmit={handleSubmit}>
+          <label>Name</label>
+          <input name="name" value={formData.name} onChange={handleChange} />
+          <label>Email</label>
+          <input name="email" value={formData.email} onChange={handleChange} />
+          <label>Password</label>
+          <input name="password" type="password" value={formData.password} onChange={handleChange} />
 
-        <input
-          type="text"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Enter Name"
-        />
+          <label>State</label>
+          <select name="state" value={formData.state} onChange={handleChange}>
+            <option value="">Select State</option>
+            {stateData.map((state) => (
+              <option key={state} value={state}>{state}</option>
+            ))}
+          </select>
 
-        <input
-          type="password"
-          value={userPassword}
-          onChange={(e) => setUserPassword(e.target.value)}
-          placeholder="Enter Password"
-        />
+          <label>City</label>
+          <select name="city" value={formData.city} onChange={handleChange}>
+            <option value="">Select City</option>
+            {formData.state && cityData[formData.state]?.map((city) => (
+              <option key={city} value={city}>{city}</option>
+            ))}
+          </select>
 
-        <button onClick={handleLogin} disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-        {error && <p className="error-message">{error}</p>}
-
-        <p>
-          Don't have an account? <Link to="/register">Register</Link>
-        </p>
+          <button type="submit">{existingUser ? "Update" : "Register"}</button>
+        </form>
       </div>
     </div>
   );
-}
+};
 
-export default Login;
+export default Register;
